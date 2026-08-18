@@ -91,4 +91,6 @@ Removes the hooks and the script, leaves the rest of your settings alone, backs 
 
 ## License
 
-MIT
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — © 2026 [pleomax00](https://github.com/pleomax00).
+
+Share and adapt freely, with attribution; derivative works must carry the same license. Full text in [LICENSE](LICENSE).
