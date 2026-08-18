@@ -35,8 +35,13 @@ HOOKS_DIR = os.path.join(CLAUDE_DIR, "hooks")
 SCRIPT_PATH = os.path.join(HOOKS_DIR, "ntfy_notify.py")
 SETTINGS_PATH = os.path.join(CLAUDE_DIR, "settings.json")
 
-IDLE_MESSAGE = "Claude is waiting for your input"
+INPUT_MESSAGE = "Claude is waiting for your input"
 STOP_MESSAGE = "Prompt has finished execution"
+
+# agent_needs_input fires when Claude actually wants an answer. The similar
+# idle_prompt fires on a 60s idle timer instead, which announces every turn
+# you walk away from whether or not anything is waiting on you.
+INPUT_MATCHER = "agent_needs_input"
 
 
 def generate_topic() -> str:
@@ -174,7 +179,7 @@ def install(topic: str) -> None:
 
     settings.setdefault("env", {})["CLAUDE_NTFY_TOPIC"] = topic
     hooks = settings.setdefault("hooks", {})
-    hooks.setdefault("Notification", []).append(make_group(IDLE_MESSAGE, "idle_prompt"))
+    hooks.setdefault("Notification", []).append(make_group(INPUT_MESSAGE, INPUT_MATCHER))
     hooks.setdefault("Stop", []).append(make_group(STOP_MESSAGE, None))
 
     with open(SETTINGS_PATH, "w", encoding="utf-8") as handle:

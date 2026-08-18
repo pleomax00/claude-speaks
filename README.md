@@ -8,7 +8,7 @@ stdlib Python only.
 
 | Event | Spoken |
 |---|---|
-| `Notification` / `idle_prompt` | "Claude is waiting for your input" |
+| `Notification` / `agent_needs_input` | "Claude is waiting for your input" |
 | `Stop` | "Prompt has finished execution" |
 
 ## Install
@@ -83,6 +83,9 @@ Removes the hooks and the script, leaves the rest of your settings alone, backs 
 - **Siri says "ntfy" first.** iOS has no setting to suppress the app-name prefix on
   third-party announcements. The only real fix is building the open-source ntfy iOS
   client yourself with a different `CFBundleDisplayName`.
+- **`agent_needs_input`, not `idle_prompt`.** The latter fires on a 60-second idle
+  timer, so it announces after every turn you walk away from even when nothing is
+  waiting on you. Swap the matcher back only if you want that.
 - **`Stop` fires every turn**, including after `/clear` and `/compact` — not just after
   long jobs.
 - **ntfy.sh topics are public.** Anyone who knows the topic can read *and* publish to it.
