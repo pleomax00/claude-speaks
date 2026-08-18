@@ -71,7 +71,10 @@ def resolve_topic(explicit: str | None) -> str:
 
 def read_notify_source() -> bytes:
     """Prefer a checked-out copy, fall back to the published one."""
-    here = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() else ""
+    # __file__ is the literal "<stdin>" when piped in, which would otherwise
+    # resolve against the caller's cwd and pick up an unrelated notify.py.
+    script = globals().get("__file__", "")
+    here = os.path.dirname(os.path.abspath(script)) if os.path.isfile(script) else ""
     local = os.path.join(here, "notify.py") if here else ""
     if local and os.path.isfile(local):
         print(f"Using local {local}")
