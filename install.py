@@ -113,12 +113,16 @@ def backup_settings() -> str | None:
 
 
 def is_our_group(group: dict) -> bool:
-    """True if this hook group was written by a past run of this installer."""
+    """True if this hook group was written by a past run of this installer.
+
+    Matched on the exact path this installer writes, never on a looser name
+    like "notify.py" -- an unrelated hook that happens to share a basename
+    must not be silently deleted.
+    """
     for hook in group.get("hooks", []):
-        for value in hook.get("args", []) or []:
-            if str(value).endswith(("ntfy_notify.py", "notify.py")):
-                return True
-        if "ntfy_notify.py" in str(hook.get("command", "")):
+        if SCRIPT_PATH in (hook.get("args") or []):
+            return True
+        if hook.get("command") == SCRIPT_PATH:
             return True
     return False
 
